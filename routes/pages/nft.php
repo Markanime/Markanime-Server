@@ -1,12 +1,15 @@
 <?php 
 namespace routes;
 use Database;
+use templates;
 
 class nft {	
     private $path = [];
 
     function __construct($path) {
         include __DIR__ .'/../../database/Database.php';
+        include __DIR__ .'/../../templates/multiverse/page.php';
+        include __DIR__ .'/../../templates/link.php';
 
         if($path!=""){
             $this->path = explode("/",$this->Sanitinize($path));
@@ -31,66 +34,54 @@ class nft {
     public function Print(){
         $result = Array();
         $db = new Database\Controller();
-        
-        if(count($this->path)>2){
-            $collection = preg_replace('/[^a-zA-Z0-9]/', '',$this->path[0]);
-            $domain = preg_replace('/[^a-zA-Z0-9]/', '',$this->path[1]);
-            $unit = preg_replace('/[^a-zA-Z0-9]/', '',$this->path[2]);
+        $collection = "";
+        $domain = "";
+        $unit = "";
 
+        if(count($this->path)>0){
+            $collection = preg_replace('/[^a-zA-Z0-9]/', '',$this->path[0]);
+        }
+        if(count($this->path)>1){
+            $domain = preg_replace('/[^a-zA-Z0-9]/', '',$this->path[1]);
+        }
+        if(count($this->path)>2){
+            $unit = preg_replace('/[^a-zA-Z0-9]/', '',$this->path[2]);
             $result = $db->Select(["link", "title", "description","image"],"links_nft",["collection",$collection,"domain",$domain,"unit",$unit]);
         }
         if (count($result) > 0) {
-            foreach ($result as $row) {
-                echo "<!DOCTYPE HTML>
-    <html lang=\"en-US\">
-        <head>
-            <meta charset=\"UTF-8\">
-            <meta http-equiv=\"refresh\" content=\"1; url=".$row["link"]."\">
-            <script type=\"text/javascript\">
-                window.location.href = \"".$row["link"]."\"
-            </script>
-            <title>".$row["title"]."</title>
-            <meta property=\"og:title\" content=\"".$row["title"]."\" />
-            <meta property=\"og:description\" content=\"".$row["description"]."\"/>
-            <meta property=\"og:image\" content=\"".$row["image"]."\" />
-            <meta charset=\"utf-8\" />
-            <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />
-        </head>
-        <body>
-            If you are not redirected automatically, Click this <a href='".$row["link"]."'> to go </a>.
-        </body>
-    </html>";
-            }
+            $link = new templates\link($result);
+            $link->Print();
         }
         else{
-            echo "<!DOCTYPE HTML>
-    <html lang=\"en-US\">
-        <head>
-            <meta charset=\"UTF-8\">
-            <title>NFT not found - Markanime Studios NFTs</title>
-            <meta property=\"og:title\" content=\"Link not found - Markanime Studios NFTs\" />
+            $pageTitle = "Markanime Studios NFTs";
+            if($domain!=""){
+                $result = $db->Select(["link", "title", "description","image"],"links_nft",["collection",$collection,"domain",$domain]);
+            }
+            if (count($result) > 0) {
+                $pageTitle = "Markanime Studios ".$domain." NFT copies";
+            }
+            else{
+                if($collection!=""){
+                    $result = $db->Select(["link", "title", "description","image"],"links_nft",["collection",$collection]);
+                }
+                if (count($result) > 0) {
+                    $pageTitle = "Markanime Studios ".$collection." NFT collection";
+                }
+                else{
+                    $result = $db->Select(["link", "title", "description","image"],"links_nft");
+                }
+            }
+
+            $page = new templates\page($pageTitle);
+            $page->SetHeaders("<meta property=\"og:title\" content=\"$pageTitle\" />
             <meta property=\"og:description\" content=\"Link not found\"/>
             <meta property=\"og:type\" content=\"website\"/>
             <meta property=\"og:image\" content=\"https://www.markanime.net/assets/logobig.jpg\" />
             <meta charset=\"utf-8\" />
-            <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />
-        </head>
-        <body>
-         <h1>NFT not found</h1>
-         
-         <p>these are all NFTs by Markanime:</p>
-         <ul>
-        ";
-            $result = $db->Select(["title", "domain","collection","unit"],"links_nft");
+            <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />");
+            $page->SetLinkMode();
             
-            if (count($result) > 0) {
-                foreach ($result as $row) {
-                    echo "<li> <a href=\"https://markani.me/nft/".$row["collection"]."/".$row["domain"]."/".$row["unit"]."\">".$row["title"]." - #".$row["unit"]."</a></li>";
-                }
-            }
-            
-    echo "</ul>
-    </body>";
+            $page->Print($result,"link","image","title","description","description");
         }
     }
 }
