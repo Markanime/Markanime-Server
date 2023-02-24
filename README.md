@@ -23,30 +23,20 @@ For this code I use MySQL relational database management system, you need to cha
 
 ```mysql
 
-CREATE DATABASE IF NOT EXISTS `test`;
-USE `test`;
+CREATE DATABASE IF NOT EXISTS `urlshortener`;
+USE `urlshortener`;
 
 CREATE TABLE IF NOT EXISTS `links` (
   `domain` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `category` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `link` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `description` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `type` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `image` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `hidden` TINYINT(1) NOT NULL,
   UNIQUE KEY `domain` (`domain`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-CREATE TABLE IF NOT EXISTS `links_nft` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `description` varchar(255) NOT NULL,
-  `domain` varchar(255) NOT NULL,
-  `image` varchar(255) NOT NULL,
-  `link` varchar(255) NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `unit` int(11) NOT NULL,
-  `collection` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 ```
 
