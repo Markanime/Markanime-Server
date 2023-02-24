@@ -41,11 +41,11 @@ class home {
             $filter= array_merge($filter,["category",$this->category]);
         }
 
-        $result = $db->Select(["link", "title","description","image"],"links",$filter);
+        $result = $db->Select(["domain", "title","description","image"],"links",$filter);
         if (count($result) <= 0) {
-            $result = $db->Select(["link", "title","description","image"],"links",["hidden",0]);
+            $result = $db->Select(["domain", "title","description","image"],"links",["hidden",0]);
         }
-        $page = new templates\page("Markanime Studios -  Links");
+        $page = new templates\page("Markanime -  Links");
         $page->SetHeaders("<meta property=\"og:title\" content=\"Markanime Studios - links\" />
         <meta property=\"og:description\" content=\"Link not found\"/>
         <meta property=\"og:type\" content=\"website\"/>
@@ -54,7 +54,7 @@ class home {
         <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />");
         $page->SetLinkMode();
         
-        $page->Print($result,"link","image","title","description","description");
+        $page->Print($result,"link","image","title","description","description","domain");
     }
 }
 ?>

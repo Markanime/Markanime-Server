@@ -9,7 +9,6 @@ The main functions are located on the **php** files from **/routes/pages**
 
 ### Link Shortener
 * **home.php** contains a small class that manages the link shortener with the data from the table **links**
-* **nft.php** a more complex link shortener with subroutes nft/collection/domain/unit (Example, *https://markani.me/nft/flash2005/steamedhams/1*) it takes the data from the table **links_nft**
 
 ### Privacy Policy generator
 As a creator I find anoying everything related to legal text, so in **privacy.php** I made a template of Privacy Policy for my apps. 

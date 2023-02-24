@@ -9,11 +9,13 @@ class page {
 	private $metaHeaders = "";
 	private $author = "";
 	private $mode = "image";
+	private $serverUrl = "";
 
 	function __construct($title) {
 		$this->config = new \PageConfig();
 		$this->title = $title;
-		$this->absUrl = "//".$_SERVER['SERVER_NAME']."/templates/multiverse";
+		$this->serverUrl = "//".$_SERVER['SERVER_NAME'];
+		$this->absUrl = $this->serverUrl."/templates/multiverse";
     }
 
 	function SetAuthor($name){
@@ -32,7 +34,7 @@ class page {
 		$this->mode = "image";
 	}
 
-	function Print($rows,$linkColumn,$imageColumn,$titleColumn,$DescriptionColumn,$altColumn){
+	function Print($rows,$linkColumn,$imageColumn,$titleColumn,$DescriptionColumn,$altColumn,$domainColumn){
 		$vars = $this->config;
 		echo "<!DOCTYPE HTML>
 	<html>
@@ -43,7 +45,25 @@ class page {
 			<link rel=\"stylesheet\" href=\"$this->absUrl/assets/css/main.css\" />
 			<noscript><link rel=\"stylesheet\" href=\"$this->absUrl/assets/css/noscript.css\" /></noscript>
 			$this->metaHeaders 
+			<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
+			<style>
+			@media screen and (max-width: 650px) {
+				#header h1 {
+					display: none;
+					}
+				}
+				@media screen and (max-width: 470px) {
+					#header nav > ul > li.categoryextra {
+					display: none;
+				}
+				@media screen and (max-width: 350px) {
+					#header nav > ul > li.category {
+					display: none;
+				}
+			}
+		  </style>
 		</head>
+		
 		<body class=\"is-preload\">
 
 			<!-- Wrapper -->
@@ -54,6 +74,9 @@ class page {
 							<h1><a href=\"index.html\"><strong>$this->title</strong>$this->author</a></h1>
 							<nav>
 								<ul>
+									<li class=\"category\"><a class=\"icon solid fa-gamepad\" style=\"cursor: pointer;\" href=\"$this->serverUrl/game\">games</a></li>
+									<li class=\"category\"><a class=\"icon solid fa-film\" style=\"cursor: pointer;\" href=\"$this->serverUrl/animation\">animations</a></li>
+									<li class=\"categoryextra\"><a class=\"icon solid fa-newspaper\" style=\"cursor: pointer;\" href=\"$this->serverUrl/post\">articles</a></li>
 									<li><a href=\"#footer\" class=\"icon solid fa-info-circle\">About</a></li>
 								</ul>
 							</nav>
@@ -63,8 +86,8 @@ class page {
 		if (count($rows) > 0) {
 			foreach ($rows as $row) {
 				echo "
-				<a href=\"".$row[$linkColumn]."\" ><article class=\"thumb\">
-									<a href=\"".$row[$linkColumn]."\" class=\"$this->mode\" ><img src=\"".$row[$imageColumn]."\" alt=\"".$row[$altColumn]."\" /></a>
+				<a href=\"".$row[$domainColumn]."\" ><article class=\"thumb\">
+									<a href=\"".$row[$domainColumn]."\" class=\"$this->mode\" ><img src=\"".$row[$imageColumn]."\" alt=\"".$row[$altColumn]."\" /></a>
 									<h2>".$row[$titleColumn]."</h2>
 									<p>".$row[$DescriptionColumn]."</p>
 								</article></a>
@@ -82,6 +105,13 @@ class page {
 									<section>
 										<h2>$vars->FOOTER_TITLE</h2>
 										<p>$vars->FOOTER_DESC</p>
+									</section>
+									<section>
+									<ul>
+										<li><a class=\"icon solid fa-gamepad\" style=\"cursor: pointer;\" href=\"$this->serverUrl/game\">games</a></li>
+										<li><a class=\"icon solid fa-film\" style=\"cursor: pointer;\" href=\"$this->serverUrl/animation\">animations</a></li>
+										<li><a class=\"icon solid fa-newspaper\" style=\"cursor: pointer;\" href=\"$this->serverUrl/post\">articles</a></li>
+									</ul>
 									</section>";
 		
 		if($vars->SOCIAL_ENABLE){
