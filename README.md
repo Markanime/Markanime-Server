@@ -25,17 +25,19 @@ For this code I use MySQL relational database management system, you need to cha
 CREATE DATABASE IF NOT EXISTS `urlshortener`;
 USE `urlshortener`;
 
-CREATE TABLE IF NOT EXISTS `links` (
-  `domain` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `category` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `link` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `description` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `type` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `image` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `hidden` TINYINT(1) NOT NULL,
-  UNIQUE KEY `domain` (`domain`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+CREATE TABLE `links` (
+	`hidden` TINYINT(1) NOT NULL DEFAULT '1',
+	`date` DATE NOT NULL DEFAULT '1989-07-22',
+	`domain` VARCHAR(255) NOT NULL COLLATE 'utf8_unicode_ci',
+	`category` VARCHAR(255) NOT NULL DEFAULT 'link' COLLATE 'utf8_unicode_ci',
+	`link` VARCHAR(255) NOT NULL COLLATE 'utf8_unicode_ci',
+	`title` VARCHAR(255) NOT NULL COLLATE 'utf8_unicode_ci',
+	`description` VARCHAR(255) NOT NULL COLLATE 'utf8_unicode_ci',
+	`type` VARCHAR(255) NOT NULL COLLATE 'utf8_unicode_ci',
+	`image` VARCHAR(255) NOT NULL COLLATE 'utf8_unicode_ci',
+	UNIQUE INDEX `domain` (`domain`) USING BTREE
+)
+COLLATE='latin1_swedish_ci'ENGINE=InnoDB;
 
 ```
 

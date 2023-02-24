@@ -17,11 +17,11 @@ class Controller {
     }
     
     public function SelectFrom($select,$from){
-        return $this->Run("SELECT ".$this->ParseArray($select,[","])." FROM ".$from);
+        return $this->Run("SELECT ".$this->ParseArray($select,[","])." FROM ".$from." order by date desc");
     }
 
     public function SelectFromWhere($select,$from,$where){
-        return $this->Run("SELECT ".$this->ParseArray($select,[","])." FROM ".$from." WHERE ".$this->ParseArray($where,["=\"","\" AND "])."\"");
+        return $this->Run("SELECT ".$this->ParseArray($select,[","])." FROM ".$from." WHERE ".$this->ParseArray($where,["=\"","\" AND "])."\""." order by date desc");
     }
 
     public function __call($method, $arguments) {
